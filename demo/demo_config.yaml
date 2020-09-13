@@ -1,0 +1,17 @@
+# works! output y: [1, 128, 223, 223]
+
+name: DemoNN 
+
+network: 
+  - conv1, conv2d, in_channels=3, out_channels=64, kernel_size=3, stride=1
+  - relu1, relu
+  - branch:
+      - conv2, conv2d, in_channels=64, out_channels=64, kernel_size=1, stride=1
+  - conv3, conv2d, in_channels=64, out_channels=64, kernel_size=1, stride=1
+  - relu2, relu
+  - conv4, conv2d, in_channels=64, out_channels=64, kernel_size=1, stride=1
+  - cat, concat, tensors=[conv4:conv2], dim=1
+  - relu3, relu
+
+
+
