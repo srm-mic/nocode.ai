@@ -54,37 +54,33 @@ def parse_yaml(path):
 
     network = configfile["network"]
     model_name = configfile["name"]
-    #print(network)
-    #print("="*50)
+
     def _build_module_list(network):
-        #print("network:", network)
+
         _prev_node = None
     
         for items in network:
-            #print("itms:", items)
+
             if isinstance(items, dict):
-                #print("items:", items["branch"][0   ])
+                
                 _build_module_list([items["branch"][0]])
                 continue
 
             _items_split = items.split(" ", 2)
             
             _id = _items_split[0]
-            #print(_items_split)
+
             _ops = _items_split[1]
             try:
                 _args = _items_split[2:]
             except:
                 pass
-            #print(f"...{_id} {_ops} {_args}")
 
             _prev_node = _id
 
-            # What the fuck to do with flow control?
+            # flow control block
             _node_wrapper = NocodeWrapper(_id, _prev_node, _ops, _args)
             forward_pass.append(_node_wrapper)
-        #print("build ends")
-
         
     _build_module_list(network)
 

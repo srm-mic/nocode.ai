@@ -20,7 +20,7 @@ class NocodeWrapper(object):
             "softmax": "Softmax", 
             "concat": "cat"
         }
-        #print("Args:", args)
+
         self.node = self._get_torch_module(self.ops, args)
     
 
@@ -33,15 +33,13 @@ class NocodeWrapper(object):
         arguments = {}
         if len(args[0]) > 0:
             
-            #print("before split in get torch:" , args)
             try:
                 args = args[0].split(" ")
             except:            
                 args = args[0][0].split(" ")
-            #print("after split in get torch:" , args)
+
             for a in args:
-                #print("a", a)
-                #print("splt equals: ", split_equals(a))
+
                 name, value = split_equals(a)
                 name = re.sub("[^a-z_]", "", name)
                 value = re.sub("[^0-9_\[a-z:0-9\]]", "", value)
@@ -57,7 +55,6 @@ class NocodeWrapper(object):
 
                 arguments.update({name: locals()[name]})
         
-        #print("moudle_name: " , module_name)
         try:
             _module = getattr(nn, self._supported_modules[module_name])(**arguments)
         except:
