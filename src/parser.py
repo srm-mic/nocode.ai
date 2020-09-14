@@ -58,12 +58,11 @@ def parse_yaml(path):
     def _build_module_list(network):
 
         _prev_node = None
-    
+
         for items in network:
 
             if isinstance(items, dict):
-                
-                _build_module_list([items["branch"][0]])
+                _build_module_list(items["branch"])
                 continue
 
             _items_split = items.split(" ", 2)
