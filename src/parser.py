@@ -76,13 +76,15 @@ def parse_yaml(path):
                 _args = _items_split[2:]
             except:
                 pass
-
-            _prev_node = _id
+            
+            if _prev_node is None:
+                _prev_node = _id
 
             # flow control block
             _node_wrapper = NocodeWrapper(_id, _prev_node, _ops, _args)
-
-            #_id = re.sub("[^a-z1-2]", "", _id) # remove this. repeted in Nocodewrapper
+            
+            _prev_node = _id
+        
 
             # appending current wrapper object to forward pass list
             forward_pass.update({_node_wrapper._id : _node_wrapper})
