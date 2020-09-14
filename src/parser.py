@@ -3,8 +3,8 @@ import yaml
 import torch
 import torch.nn as nn
 
-from wrapper import NocodeWrapper
-
+from .wrapper import NocodeWrapper
+import re
 
 """ 
 Parse the YAML files in a ready to build format. 
@@ -50,7 +50,7 @@ def parse_yaml(path):
             exit()
     
     model = nn.ModuleList()
-    forward_pass = []
+    forward_pass = {}
 
     network = configfile["network"]
     model_name = configfile["name"]
@@ -71,6 +71,7 @@ def parse_yaml(path):
             _id = _items_split[0]
 
             _ops = _items_split[1]
+            
             try:
                 _args = _items_split[2:]
             except:
@@ -80,7 +81,24 @@ def parse_yaml(path):
 
             # flow control block
             _node_wrapper = NocodeWrapper(_id, _prev_node, _ops, _args)
-            forward_pass.append(_node_wrapper)
+
+            #_id = re.sub("[^a-z1-2]", "", _id) # remove this. repeted in Nocodewrapper
+
+            # appending current wrapper object to forward pass list
+            forward_pass.update({_node_wrapper._id : _node_wrapper})
+
+            # changing the parity bits of the all the nodes that are required 
+            # later by this node
+            if _node_wrapper._require_previous == False:
+                pass 
+            else:
+                # right now only supports concat. Basically sets all the _required_later
+                # parity of all the tensors involved as True so that they can be selectively
+                # stored to save memory  
+                for node in _node_wrapper.args['tensors']:
+                    forward_pass[node]._used_later = True
+
+
         
     _build_module_list(network)
 

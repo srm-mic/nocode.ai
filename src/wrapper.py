@@ -12,7 +12,7 @@ class NocodeWrapper(object):
         self.prev = prev_node 
         self.ops = ops 
         self.args = args
-        self._id = _id
+        self._id = re.sub("[^a-z1-9]", "", _id) 
         self._supported_modules = {
             "conv2d": "Conv2d",
             "Linear": "Linear", 
@@ -20,15 +20,15 @@ class NocodeWrapper(object):
             "softmax": "Softmax", 
             "concat": "cat"
         }
-
+        self._used_later = False
+        self._require_previous = False
         self.node = self._get_torch_module(self.ops, args)
     
 
     def _get_torch_module(self, module_name, args):
 
         split_equals = lambda x: x.split("=")
-        
-        module_name = re.sub("[^a-z1-2]", "", module_name) 
+        module_name = re.sub("[^a-z1-9]", "", module_name) 
 
         arguments = {}
         if len(args[0]) > 0:
@@ -47,6 +47,9 @@ class NocodeWrapper(object):
                 if module_name != "concat":
                     exec(f"{name}={int(value)}")
                 else:
+                    
+                    self._require_previous = True
+
                     if name == "dim":       
                         exec(f"{name}={int(value)}")             
                     else:
@@ -59,6 +62,7 @@ class NocodeWrapper(object):
             _module = getattr(nn, self._supported_modules[module_name])(**arguments)
         except:
             _module = EmptyLayer()
+            self.args = arguments
             print("Empty layer added for args: ", arguments)
-            
+        
         return _module
