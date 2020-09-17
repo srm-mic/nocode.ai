@@ -55,14 +55,25 @@ def parse_yaml(path):
     network = configfile["network"]
     model_name = configfile["name"]
 
-    def _build_module_list(network):
-
-        _prev_node = None
+    def _build_module_list(network, branched_from=None):
+        
+        if branched_from is None:
+            _prev_node = None
+        else:
+            _prev_node = branched_from
 
         for items in network:
 
             if isinstance(items, dict):
-                _build_module_list(items["branch"])
+                
+                # fix this. Just to make it work. making a copy of _prev_node
+                # and removing unwanted characters from it. _prev_node is cleaned
+                # within the wrapper. remove this unnecessary dual computation
+                _prev_node_copy = re.sub("[^a-z1-9]", "", _prev_node) 
+
+                forward_pass[_prev_node_copy]._used_later = True
+                _build_module_list(items["branch"], _prev_node_copy)
+                
                 continue
 
             _items_split = items.split(" ", 2)

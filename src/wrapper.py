@@ -9,8 +9,8 @@ class NocodeWrapper(object):
 
     def __init__(self, _id, prev_node, ops, *args):
  
-        self.prev = prev_node 
-        self.ops = ops 
+        self.prev = re.sub("[^a-z1-9]", "", prev_node) 
+        self.ops = re.sub("[^a-z1-9]", "", ops) 
         self.args = args
         self._id = re.sub("[^a-z1-9]", "", _id) 
         self._supported_modules = {

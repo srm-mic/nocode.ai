@@ -2,6 +2,15 @@
 
 Design, Build, Train and Deploy AI without any code!
 
+## Immediate todos
+
+- [x] Verify forward pass
+
+- [ ] Only last node in forward pass returns. As in multi return forward pass
+      note supported.
+
+- [x] Model loading
+
 ## Support to be added
 
 - [ ] Unnamed parameters in yaml file
