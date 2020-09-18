@@ -18,7 +18,9 @@ class NocodeWrapper(object):
             "Linear": "Linear", 
             "relu": "ReLU", 
             "softmax": "Softmax", 
-            "concat": "cat"
+            "concat": "cat", 
+            "linear": "Linear", 
+            "sigmoid": "Sigmoid"
         }
         self._used_later = False
         self._require_previous = False

@@ -1,0 +1,7 @@
+name: DemoLinear
+
+network: 
+  - lin1, linear, in_features=3, out_features=10
+  - sig1, sigmoid
+  - lin2, linear, in_features=10, out_features=1 
+  - sig2, sigmoid 

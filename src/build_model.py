@@ -36,7 +36,9 @@ class SkeletonModel(nn.Module):
     def load_state_dict(self):
         raise NotImplementedError("please use load_weights() fn")
 
-
+    def show_nodes(self):
+        for k, v in self.forward_list.items():
+            print(f"{k}: {v.node}")
 
     def forward(self, x):
 
@@ -49,7 +51,7 @@ class SkeletonModel(nn.Module):
 
                     x = self._reserved[node.prev]
 
-            if node.ops == "conv2d" or node.ops == "relu":
+            if node.ops in ["conv2d" , "relu", "softmax", "linear", "sigmoid"]:
                 
                 print(f"Current_id: {node._id}, prev_node: {node.prev}")
                 x = node.node(x)
