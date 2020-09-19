@@ -11,6 +11,8 @@ Design, Build, Train and Deploy AI without any code!
 
 - [x] Model loading
 
+- [ ] Custom modules
+
 ## Support to be added
 
 - [ ] Unnamed parameters in yaml file
