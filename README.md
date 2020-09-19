@@ -13,6 +13,12 @@ Design, Build, Train and Deploy AI without any code!
 
 - [ ] Custom modules
 
+- [ ] More Ops
+
+- [ ] CLI
+
+- [ ] Training API and/or from CLI
+
 ## Support to be added
 
 - [ ] Unnamed parameters in yaml file

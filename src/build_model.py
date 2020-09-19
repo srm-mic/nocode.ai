@@ -53,7 +53,7 @@ class SkeletonModel(nn.Module):
 
             if node.ops in ["conv2d" , "relu", "softmax", "linear", "sigmoid"]:
                 
-                print(f"Current_id: {node._id}, prev_node: {node.prev}")
+                #print(f"Current_id: {node._id}, prev_node: {node.prev}")
                 x = node.node(x)
                 self._current_active_node = node._id
                 
@@ -62,7 +62,7 @@ class SkeletonModel(nn.Module):
                     self._reserved.update({key: x})
             
             elif node.ops == "concat":
-                print(f"Current_id: {node._id}, prev_node: {node.prev}")
+                #print(f"Current_id: {node._id}, prev_node: {node.prev}")
                 _to_be_concat = [self._reserved[i] for i in node.args["tensors"]]
                 x = torch.cat(_to_be_concat, dim=node.args["dim"])
                 self._current_active_node = node._id

@@ -20,7 +20,9 @@ class NocodeWrapper(object):
             "softmax": "Softmax", 
             "concat": "cat", 
             "linear": "Linear", 
-            "sigmoid": "Sigmoid"
+            "sigmoid": "Sigmoid", 
+            "flatten": "flatten"
+
         }
         self._used_later = False
         self._require_previous = False
@@ -31,6 +33,11 @@ class NocodeWrapper(object):
 
         split_equals = lambda x: x.split("=")
         module_name = re.sub("[^a-z1-9]", "", module_name) 
+
+        if module_name != "flatten":
+            _parent_torch_module = nn 
+        else:
+            _parent_torch_module = torch
 
         arguments = {}
         if len(args[0]) > 0:
@@ -61,7 +68,7 @@ class NocodeWrapper(object):
                 arguments.update({name: locals()[name]})
         
         try:
-            _module = getattr(nn, self._supported_modules[module_name])(**arguments)
+            _module = getattr(_parent_torch_module, self._supported_modules[module_name])(**arguments)
         except:
             _module = EmptyLayer()
             self.args = arguments
