@@ -2,6 +2,8 @@
 
 Design, Build, Train and Deploy AI without any code!
 
+[ Under Active Development ]
+
 ## Immediate todos
 
 - [x] Verify forward pass
