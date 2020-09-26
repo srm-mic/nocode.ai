@@ -9,10 +9,10 @@ class NocodeWrapper(object):
 
     def __init__(self, _id, prev_node, ops, *args):
  
-        self.prev = re.sub("[^a-z1-9]", "", prev_node) 
-        self.ops = re.sub("[^a-z1-9]", "", ops) 
+        self.prev = re.sub("[^a-z0-9]", "", prev_node) 
+        self.ops = re.sub("[^a-z0-9]", "", ops) 
         self.args = args
-        self._id = re.sub("[^a-z1-9]", "", _id) 
+        self._id = re.sub("[^a-z0-9]", "", _id) 
         self._supported_modules = {
             "conv2d": "Conv2d",
             "Linear": "Linear", 
@@ -21,7 +21,8 @@ class NocodeWrapper(object):
             "concat": "cat", 
             "linear": "Linear", 
             "sigmoid": "Sigmoid", 
-            "flatten": "flatten"
+            "flatten": "flatten", 
+            "custom": "custom"
 
         }
         self._used_later = False
@@ -32,7 +33,7 @@ class NocodeWrapper(object):
     def _get_torch_module(self, module_name, args):
 
         split_equals = lambda x: x.split("=")
-        module_name = re.sub("[^a-z1-9]", "", module_name) 
+        module_name = re.sub("[^a-z0-9]", "", module_name) 
 
         if module_name != "flatten":
             _parent_torch_module = nn 
@@ -53,8 +54,12 @@ class NocodeWrapper(object):
                 name = re.sub("[^a-z_]", "", name)
                 value = re.sub("[^0-9_\[a-z:0-9\]]", "", value)
 
-                if module_name != "concat":
+                if module_name != "concat" and module_name != "custom":
                     exec(f"{name}={int(value)}")
+                
+                elif module_name == "custom":
+                    exec(f"{name}='{value}'")
+                
                 else:
                     
                     self._require_previous = True
@@ -72,6 +77,6 @@ class NocodeWrapper(object):
         except:
             _module = EmptyLayer()
             self.args = arguments
-            print("Empty layer added for args: ", arguments)
+            print(f"Empty layer added for {module_name} args: {arguments}")
         
         return _module

@@ -14,6 +14,11 @@ Design, Build, Train and Deploy AI without any code!
 - [x] Model loading
 
 - [ ] Custom modules
+      - [ ] Unbranched linear custom modules support
+      - [ ] DO NOT take the *look up in custom module dict approach, in that case copies are used*. Instead figure out a way have individual entities for each custom module occurance in the forward pass itself.
+      - [ ] Custom modules verification
+      - [ ] Weights loading
+      - [ ] Branching in Custom Modules
 
 - [ ] More Ops
 

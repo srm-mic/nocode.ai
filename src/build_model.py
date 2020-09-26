@@ -8,7 +8,7 @@ import torch.nn.functional as F
 
 class SkeletonModel(nn.Module):
 
-    def __init__(self, forward_list):
+    def __init__(self, forward_list, custom_list={}, _debug=False):
         
         super(SkeletonModel, self).__init__()
 
@@ -16,9 +16,10 @@ class SkeletonModel(nn.Module):
             #print(f"{key}-> prev_node: {val.prev}, used_later: {val._used_later}")
         
         self.forward_list = forward_list
+        self.custom_list = custom_list
         self._reserved = {}
         self._current_active_node = None
-    
+        self._debug = _debug
 
     def load_weights(self, path):
 
@@ -43,7 +44,9 @@ class SkeletonModel(nn.Module):
     def forward(self, x):
 
         for key, node in self.forward_list.items():
-            #print(f"key:{key}, prev_node: {node.prev}, used_later:{node._used_later}, ops:{node.ops}")
+
+            if self._debug:
+                print(f"key:{key}, prev_node: {node.prev}, used_later:{node._used_later}, ops:{node.ops}")
 
             if self._current_active_node is not None: 
                 
@@ -66,7 +69,18 @@ class SkeletonModel(nn.Module):
                 _to_be_concat = [self._reserved[i] for i in node.args["tensors"]]
                 x = torch.cat(_to_be_concat, dim=node.args["dim"])
                 self._current_active_node = node._id
+            
+            elif node.ops == "custom":
+
+                _tmp_node = self.custom_list[node.args["block"]]
+                #print(_tmp_node)
+                x = _tmp_node(x)
+                self._current_active_node = node._id
+
+                if node._used_later == True:
+                    self._reserved.update({key, x})
           
+                del _tmp_node
 
         return x
                 
