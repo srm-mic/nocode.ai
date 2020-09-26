@@ -12,13 +12,16 @@ Design, Build, Train and Deploy AI without any code!
       note supported.
 
 - [x] Model loading
-
-- [ ] Custom modules
-      - [ ] Unbranched linear custom modules support
-      - [ ] DO NOT take the *look up in custom module dict approach, in that case copies are used*. Instead figure out a way have individual entities for each custom module occurance in the forward pass itself.
-      - [ ] Custom modules verification
-      - [ ] Weights loading
-      - [ ] Branching in Custom Modules
+    
+- [ ] Unbranched linear custom modules support
+      
+- [ ] DO NOT take the *look up in custom module dict approach, in that case copies are used*. Instead figure out a way have individual entities for each custom module occurance in the forward pass itself.
+      
+- [ ] Custom modules verification
+      
+- [ ] Weights loading
+      
+- [ ] Branching in Custom Modules
 
 - [ ] More Ops
 
@@ -36,4 +39,4 @@ Design, Build, Train and Deploy AI without any code!
 
 - [ ] Remove the necessity of the first entry in YAML File to be identifier for ops like concat
 
-- [ ] **Memory efficiency: save intermediate steps only when required by a later node**
+- [x] **Memory efficiency: save intermediate steps only when required by a later node**
